@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 public final class QueryUtils {
 
@@ -36,6 +36,7 @@ public final class QueryUtils {
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
         try {
+
             JSONObject root = new JSONObject(SAMPLE_JSON_RESPONSE);
             JSONArray features =  root.getJSONArray("features");
 
@@ -44,10 +45,15 @@ public final class QueryUtils {
                 JSONObject obj = features.getJSONObject(i);
                 JSONObject properties = obj.getJSONObject("properties");
 
-                Double magnitude = Double.valueOf(properties.getString("mag"));
+                //populating fields
+                double magnitude = Double.parseDouble(properties.getString("mag"));
                 String place = properties.getString("place");
 
+                //Formatting string place
+                place = formatPlace(place);
+
                 String time = properties.getString("time");
+
 
                 earthquakes.add(new Earthquake(magnitude, place, time));
 
@@ -59,6 +65,27 @@ public final class QueryUtils {
         }
 
         return earthquakes;
+    }
+
+    private static String formatPlace(String place){
+        List<String> list;
+        String placeFormatted;
+
+        //Formatted string place to better form of visualization
+        list = Arrays.asList(place.split(","));
+        int index = list.get(0).indexOf("of");
+        String city = list.get(0).substring((index + 3));
+
+        try{
+
+            String country = list.get(1);
+            placeFormatted = city + ", " + country;
+
+        }catch (ArrayIndexOutOfBoundsException e){
+            placeFormatted = city;
+        }
+
+        return placeFormatted;
     }
 
 }
