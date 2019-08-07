@@ -7,8 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,12 +49,15 @@ public final class QueryUtils {
 
                 //populating fields
                 double magnitude = Double.parseDouble(properties.getString("mag"));
+
                 String place = properties.getString("place");
 
                 //Formatting string place
                 place = formatPlace(place);
 
                 String time = properties.getString("time");
+                //Formatting string time
+                time = formatDate(time);
 
 
                 earthquakes.add(new Earthquake(magnitude, place, time));
@@ -86,6 +91,18 @@ public final class QueryUtils {
         }
 
         return placeFormatted;
+    }
+
+    private static String formatDate(String time){
+        Long timeInMilliseconds = Long.valueOf(time);
+
+        Date date = new Date(timeInMilliseconds);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD , YYYY");
+
+        String timeFormatted = dateFormat.format(date);
+
+        return timeFormatted;
     }
 
 }
