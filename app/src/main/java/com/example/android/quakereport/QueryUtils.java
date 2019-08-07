@@ -7,11 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 
 public final class QueryUtils {
@@ -29,42 +25,33 @@ public final class QueryUtils {
             "{\"type\":\"Feature\",\"properties\":{\"mag\":6.5,\"place\":\"227km SE of Sarangani, Philippines\",\"time\":1452530285900,\"updated\":1459304874040,\"tz\":480,\"url\":\"http://earthquake.usgs.gov/earthquakes/eventpage/us10004dj5\",\"detail\":\"http://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us10004dj5&format=geojson\",\"felt\":1,\"cdi\":2.7,\"mmi\":7.5,\"alert\":\"green\",\"status\":\"reviewed\",\"tsunami\":1,\"sig\":650,\"net\":\"us\",\"code\":\"10004dj5\",\"ids\":\",at00o0srjp,pt16011050,us10004dj5,gcmt20160111163807,\",\"sources\":\",at,pt,us,gcmt,\",\"types\":\",cap,dyfi,geoserve,impact-link,impact-text,losspager,moment-tensor,nearby-cities,origin,phase-data,shakemap,tectonic-summary,\",\"nst\":null,\"dmin\":3.144,\"rms\":0.72,\"gap\":22,\"magType\":\"mww\",\"type\":\"earthquake\",\"title\":\"M 6.5 - 227km SE of Sarangani, Philippines\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[126.8621,3.8965,13]},\"id\":\"us10004dj5\"},\n" +
             "{\"type\":\"Feature\",\"properties\":{\"mag\":6,\"place\":\"Pacific-Antarctic Ridge\",\"time\":1451986454620,\"updated\":1459202978040,\"tz\":-540,\"url\":\"http://earthquake.usgs.gov/earthquakes/eventpage/us10004bgk\",\"detail\":\"http://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us10004bgk&format=geojson\",\"felt\":0,\"cdi\":1,\"mmi\":0,\"alert\":\"green\",\"status\":\"reviewed\",\"tsunami\":0,\"sig\":554,\"net\":\"us\",\"code\":\"10004bgk\",\"ids\":\",us10004bgk,gcmt20160105093415,\",\"sources\":\",us,gcmt,\",\"types\":\",cap,dyfi,geoserve,losspager,moment-tensor,nearby-cities,origin,phase-data,shakemap,\",\"nst\":null,\"dmin\":30.75,\"rms\":0.67,\"gap\":71,\"magType\":\"mww\",\"type\":\"earthquake\",\"title\":\"M 6.0 - Pacific-Antarctic Ridge\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-136.2603,-54.2906,10]},\"id\":\"us10004bgk\"}],\"bbox\":[-153.4051,-54.2906,10,158.5463,59.6363,582.56]}";
 
-    private QueryUtils(){
+    private QueryUtils() {
 
     }
 
     @SuppressLint("LongLogTag")
-    public static ArrayList<Earthquake> extractEarthquakes(){
+    public static ArrayList<Earthquake> extractEarthquakes() {
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
         try {
 
             JSONObject root = new JSONObject(SAMPLE_JSON_RESPONSE);
-            JSONArray features =  root.getJSONArray("features");
+            JSONArray features = root.getJSONArray("features");
 
-            for (int i = 0; i < features.length(); i++){
+            for (int i = 0; i < features.length(); i++) {
 
                 JSONObject obj = features.getJSONObject(i);
                 JSONObject properties = obj.getJSONObject("properties");
 
                 //populating fields
                 double magnitude = Double.parseDouble(properties.getString("mag"));
-
                 String place = properties.getString("place");
-
-                //Formatting string place
-                place = formatPlace(place);
-
-                String time = properties.getString("time");
-                //Formatting string time
-                time = formatDate(time);
-
+                Long time = properties.getLong("time");
 
                 earthquakes.add(new Earthquake(magnitude, place, time));
-
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
 
             Log.e(TAG, "Problem parsing the earthquake JSON result", e);
         }
@@ -72,37 +59,5 @@ public final class QueryUtils {
         return earthquakes;
     }
 
-    private static String formatPlace(String place){
-        List<String> list;
-        String placeFormatted;
-
-        //Formatted string place to better form of visualization
-        list = Arrays.asList(place.split(","));
-        int index = list.get(0).indexOf("of");
-        String city = list.get(0).substring((index + 3));
-
-        try{
-
-            String country = list.get(1);
-            placeFormatted = city + ", " + country;
-
-        }catch (ArrayIndexOutOfBoundsException e){
-            placeFormatted = city;
-        }
-
-        return placeFormatted;
-    }
-
-    private static String formatDate(String time){
-        Long timeInMilliseconds = Long.valueOf(time);
-
-        Date date = new Date(timeInMilliseconds);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD , YYYY");
-
-        String timeFormatted = dateFormat.format(date);
-
-        return timeFormatted;
-    }
 
 }
