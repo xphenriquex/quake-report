@@ -8,12 +8,12 @@ import java.util.List;
 public class Earthquake {
     private double mMag;
     private String mPlace;
-    private String mDate;
+    private Long mTime;
 
-    public Earthquake(double mag, String place, Long date) {
+    public Earthquake(double mag, String place, Long time) {
         this.mMag = mag;
-        this.mPlace = setPlaceFormatted(place);
-        this.mDate = setDateFormatted(date);
+        this.mPlace = place;
+        this.mTime = time;
 
     }
 
@@ -22,25 +22,11 @@ public class Earthquake {
     }
 
     public String getPlace() {
-        return mPlace;
-    }
-
-    public String getDate() {
-        return mDate;
-    }
-
-    private String setDateFormatted(Long timeInMilliseconds){
-        Date date = new Date(timeInMilliseconds);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD , YYYY");
-        return dateFormat.format(date);
-    }
-
-    private String setPlaceFormatted(String place){
         List<String> list;
         String placeFormatted;
 
-        //Formatted string place to better form of visualization
-        list = Arrays.asList(place.split(","));
+        //Formatted string place to a better visualization
+        list = Arrays.asList(mPlace.split(","));
         int index = list.get(0).indexOf("of");
         String city = list.get(0).substring((index + 3));
 
@@ -55,5 +41,19 @@ public class Earthquake {
 
         return placeFormatted;
     }
+
+    public String getDate() {
+        Date date = new Date(mTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD, YYYY");
+        return dateFormat.format(date);
+    }
+
+    public String getHour(){
+        Date hour = new Date(mTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        return dateFormat.format(hour);
+    }
+
+
 
 }
