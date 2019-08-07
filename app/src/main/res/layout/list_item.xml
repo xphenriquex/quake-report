@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="15sp"
+        android:textSize="13sp"
         tools:text="7.2" />
 
     <TextView
@@ -22,17 +22,27 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_weight="1"
-        android:textSize="15sp"
-        tools:text="San Francisco" />
+        android:textSize="13sp"
+        tools:text="Sarangani, Philippines" />
 
     <TextView
         android:id="@+id/date_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:layout_weight="1"
-        android:textSize="15sp"
-        tools:text="Feb 2, 2016" />
+        android:textSize="13sp"
+        tools:text="jan 14, 2016 " />
+
+    <TextView
+        android:id="@+id/hour_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="13sp"
+        tools:text=" 00:01 P M" />
+
+
+
 
 </LinearLayout>
 
